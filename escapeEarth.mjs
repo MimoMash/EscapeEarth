@@ -21,6 +21,7 @@ async function start() {
   const earthsAxialTilt = await findEarthAxialTilt();
   console.log("Earth's Axial Tilt:", earthsAxialTilt);
   await fetchAllPlanetsTilt();
+  await submitAnswer("Mars");
 }
 
 async function calculateSunRadius() {
@@ -42,7 +43,7 @@ async function fetchAllPlanetsTilt() {
     for (let i = 0; i < planets.length; i++) {
         planetsAxialTilts.push({Planet: planets[i].englishName, AxialTilt: planets[i].axialTilt})
     }
-    console.log(planetsAxialTilts);
+    console.log(planetsAxialTilts); 
 }
 
 async function submitAnswer(answer) {
@@ -60,7 +61,6 @@ async function submitAnswer(answer) {
   }
 
 async function fetchSolarData(ending) {
-    console.log("Fetching solar system data");
     const response = await fetch(`${API}${ending}`);
     const data = await response.json();
     return data;
