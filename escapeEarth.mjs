@@ -22,6 +22,9 @@ async function start() {
   console.log("Earth's Axial Tilt:", earthsAxialTilt);
   await fetchAllPlanetsTilt();
   await submitAnswer("Mars");
+
+  //Third Challenge
+  await findPlanetWithShortestDay()
 }
 
 async function calculateSunRadius() {
@@ -34,6 +37,27 @@ async function findEarthAxialTilt() {
     const response = await fetchSolarData("bodies/Earth");
     const axialTilt = response.axialTilt;
     return axialTilt;
+}
+
+async function findPlanetWithShortestDay() {
+    const bodies = await fetchSolarData("bodies");
+    const planets = bodies.bodies.filter((body) => body.isPlanet);
+    const dayPeriodInHours = [];
+    for (let i = 0; i < planets.length; i++) {
+        dayPeriodInHours.push({Planet: planets[i].englishName, DayCycle: planets[i].sideralRotation})
+    }
+
+    let shortestDay = Infinity;
+    let planetWithShortestDay = null;
+
+    for (let i = 0; i < dayPeriodInHours.length; i++) {
+        if (Math.abs(dayPeriodInHours[i].DayCycle) < shortestDay) {
+            shortestDay = Math.abs(dayPeriodInHours[i].DayCycle);
+            planetWithShortestDay = dayPeriodInHours[i].Planet;
+        }
+    }
+    
+    return planetWithShortestDay;
 }
 
 async function fetchAllPlanetsTilt() {
