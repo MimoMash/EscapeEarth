@@ -13,12 +13,12 @@ async function start() {
   console.log("Mission received:", mission.message);
   console.log("Challenge:", mission.challenge);
 
-  fetchSolarData();
+  fetchSolarData("Sun");
 }
 
-async function fetchSolarData() {
+async function fetchSolarData(englishName) {
     console.log("Fetching solar system data");
-    const response = await fetch(API);
+    const response = await fetch(`${API}/${englishName}`);
     
     const data = await response.json();
     console.log(data)
