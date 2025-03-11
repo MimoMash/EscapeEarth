@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 const EMAIL = "mohammaa@uia.no"; 
 const RIS = "https://spacescavanger.onrender.com";
-const API = "https://api.le-systeme-solaire.net/rest/bodies/";
+const API = "https://api.le-systeme-solaire.net/rest/";
 
 async function start() {
   console.log("Starting mission");
@@ -20,18 +20,29 @@ async function start() {
   //Second Challenge
   const earthsAxialTilt = await findEarthAxialTilt();
   console.log("Earth's Axial Tilt:", earthsAxialTilt);
+  await fetchAllPlanetsTilt();
 }
 
 async function calculateSunRadius() {
-    const response = await fetchSolarData("Sun");
+    const response = await fetchSolarData("bodies/Sun");
     const pin = response.equaRadius - response.meanRadius;
     return pin;
 }
 
 async function findEarthAxialTilt() {
-    const response = await fetchSolarData("Earth");
+    const response = await fetchSolarData("bodies/Earth");
     const axialTilt = response.axialTilt;
     return axialTilt;
+}
+
+async function fetchAllPlanetsTilt() {
+    const bodies = await fetchSolarData("bodies");
+    const planets = bodies.bodies.filter((body) => body.isPlanet);
+    const planetsAxialTilts = [];
+    for (let i = 0; i < planets.length; i++) {
+        planetsAxialTilts.push({Planet: planets[i].englishName, AxialTilt: planets[i].axialTilt})
+    }
+    console.log(planetsAxialTilts);
 }
 
 async function submitAnswer(answer) {
@@ -48,9 +59,9 @@ async function submitAnswer(answer) {
     return result;
   }
 
-async function fetchSolarData(englishName) {
+async function fetchSolarData(ending) {
     console.log("Fetching solar system data");
-    const response = await fetch(`${API}/${englishName}`);
+    const response = await fetch(`${API}${ending}`);
     const data = await response.json();
     return data;
   }
