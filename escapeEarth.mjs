@@ -26,6 +26,11 @@ async function start() {
   //Third Challenge
   const planetWithShortestDay = await findPlanetWithShortestDay();
   await submitAnswer(planetWithShortestDay);
+
+  //Fourth Challenge
+  const JupiterMoons = await amountOfJupiterMoons();
+  await submitAnswer(JupiterMoons);
+
 }
 
 async function calculateSunRadius() {
@@ -59,6 +64,16 @@ async function findPlanetWithShortestDay() {
     }
 
     return planetWithShortestDay;
+}
+
+async function amountOfJupiterMoons() {
+    const jupiter = await fetchSolarData("bodies/Jupiter");
+    let amountOfMoons = 0;
+
+    for (let i = 0; i < jupiter.moons.length; i++) {
+        amountOfMoons = i + 1;
+    }
+    return amountOfMoons;
 }
 
 async function fetchAllPlanetsTilt() {
