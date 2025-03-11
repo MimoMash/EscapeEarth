@@ -24,7 +24,8 @@ async function start() {
   await submitAnswer("Mars");
 
   //Third Challenge
-  await findPlanetWithShortestDay()
+  const planetWithShortestDay = await findPlanetWithShortestDay();
+  await submitAnswer(planetWithShortestDay);
 }
 
 async function calculateSunRadius() {
@@ -56,7 +57,7 @@ async function findPlanetWithShortestDay() {
             planetWithShortestDay = dayPeriodInHours[i].Planet;
         }
     }
-    
+
     return planetWithShortestDay;
 }
 
