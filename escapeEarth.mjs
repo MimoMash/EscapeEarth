@@ -13,14 +13,25 @@ async function start() {
   console.log("Mission received:", mission.message);
   console.log("Challenge:", mission.challenge);
 
+  //First Challenge
   const pin = await calculateSunRadius();
-  submitAnswer(pin);
+  await submitAnswer(pin);
+  
+  //Second Challenge
+  const earthsAxialTilt = await findEarthAxialTilt();
+  console.log("Earth's Axial Tilt:", earthsAxialTilt);
 }
 
 async function calculateSunRadius() {
     const response = await fetchSolarData("Sun");
     const pin = response.equaRadius - response.meanRadius;
     return pin;
+}
+
+async function findEarthAxialTilt() {
+    const response = await fetchSolarData("Earth");
+    const axialTilt = response.axialTilt;
+    return axialTilt;
 }
 
 async function submitAnswer(answer) {
