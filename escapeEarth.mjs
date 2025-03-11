@@ -18,10 +18,8 @@ async function start() {
   await submitAnswer(pin);
   
   //Second Challenge
-  const earthsAxialTilt = await findEarthAxialTilt();
-  console.log("Earth's Axial Tilt:", earthsAxialTilt);
-  await fetchAllPlanetsTilt();
-  await submitAnswer("Mars");
+  const planetWithClosestAxialTilt = await findClosestAxialTilt();
+  await submitAnswer(planetWithClosestAxialTilt);
 
   //Third Challenge
   const planetWithShortestDay = await findPlanetWithShortestDay();
@@ -117,14 +115,29 @@ async function findPlutoClassification() {
    return bodyType;
 }
 
-async function fetchAllPlanetsTilt() {
+async function findClosestAxialTilt() {
     const bodies = await fetchSolarData("bodies");
     const planets = bodies.bodies.filter((body) => body.isPlanet);
     const planetsAxialTilts = [];
     for (let i = 0; i < planets.length; i++) {
-        planetsAxialTilts.push({Planet: planets[i].englishName, AxialTilt: planets[i].axialTilt})
+        if(planets[i].englishName != "Earth") {
+            planetsAxialTilts.push({Planet: planets[i].englishName, AxialTilt: planets[i].axialTilt})
+        }
     }
-    console.log(planetsAxialTilts); 
+    
+    const earthAxialTilt = await findEarthAxialTilt();
+    let difference = Infinity;
+    let closestPlanet = null;
+
+    for (let i = 0; i < planetsAxialTilts.length; i++) {
+        const currentDifference = Math.abs(earthAxialTilt - planetsAxialTilts[i].AxialTilt);
+        if (currentDifference < difference) {
+            difference = currentDifference;
+            closestPlanet = planetsAxialTilts[i].Planet;
+        }
+    }
+
+    return closestPlanet;
 }
 
 async function submitAnswer(answer) {
