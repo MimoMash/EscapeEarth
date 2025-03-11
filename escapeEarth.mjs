@@ -13,6 +13,15 @@ async function start() {
   console.log("Mission received:", mission.message);
   console.log("Challenge:", mission.challenge);
 
+  fetchSolarData();
 }
+
+async function fetchSolarData() {
+    console.log("Fetching solar system data");
+    const response = await fetch(API);
+    
+    const data = await response.json();
+    console.log(data)
+  }
 
 start();
