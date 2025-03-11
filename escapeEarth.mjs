@@ -34,6 +34,10 @@ async function start() {
   //Fifth Challenge
   const largestMoon = await largestMoonOfJupiter();
   await submitAnswer(largestMoon);
+
+  //Sixth Challenge
+  const plutoClassification = await findPlutoClassification();
+  await submitAnswer(plutoClassification);
 }
 
 async function calculateSunRadius() {
@@ -81,7 +85,7 @@ async function amountOfJupiterMoons() {
 
 async function largestMoonOfJupiter() {
     const jupiter = await fetchSolarData("bodies/Jupiter");
-    const moons =jupiter.moons;
+    const moons = jupiter.moons;
     const moonURLs = [];
     for (let i = 0; i < moons.length; i++) {
         moonURLs.push(moons[i].rel);
@@ -105,6 +109,12 @@ async function largestMoonOfJupiter() {
     }
 
     return largestMoonName;
+}
+
+async function findPlutoClassification() {
+   const pluto = await fetchSolarData("bodies/pluto");
+   const bodyType = pluto.bodyType;
+   return bodyType;
 }
 
 async function fetchAllPlanetsTilt() {
