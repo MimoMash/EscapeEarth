@@ -13,15 +13,35 @@ async function start() {
   console.log("Mission received:", mission.message);
   console.log("Challenge:", mission.challenge);
 
-  fetchSolarData("Sun");
+  const pin = await calculateSunRadius();
+  submitAnswer(pin);
 }
+
+async function calculateSunRadius() {
+    const response = await fetchSolarData("Sun");
+    const pin = response.equaRadius - response.meanRadius;
+    return pin;
+}
+
+async function submitAnswer(answer) {
+    console.log("Submitting answer:", answer);
+    
+    const response = await fetch(`${RIS}/answer`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ answer, player: EMAIL })
+    });
+    
+    const result = await response.json();
+    console.log('Response received:', result);
+    return result;
+  }
 
 async function fetchSolarData(englishName) {
     console.log("Fetching solar system data");
     const response = await fetch(`${API}/${englishName}`);
-    
     const data = await response.json();
-    console.log(data)
+    return data;
   }
 
 start();
